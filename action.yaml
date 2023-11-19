@@ -1,0 +1,23 @@
+name: "Update Mozilla Update JSON"
+description: "Update Mozilla Addons Update JSON on Release"
+author: "Shane"
+
+inputs:
+  url:
+    description: "Update URL with {version} String"
+    required: true
+  manifest:
+    description: "Manifest File Location"
+    required: false
+    default: "manifest.json"
+  update:
+    description: "Update File Location"
+    required: false
+    default: "update.json"
+  addon_id:
+    description: "Mozilla Addon ID"
+    required: false
+
+runs:
+  using: "docker"
+  image: "Dockerfile"
