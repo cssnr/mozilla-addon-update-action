@@ -2,8 +2,6 @@ import json
 import os
 from typing import Any, Dict, Optional
 
-print(os.environ)
-
 input_url = os.environ['INPUT_URL']
 input_manifest = os.environ['INPUT_MANIFEST']
 input_update = os.environ['INPUT_UPDATE']
@@ -14,7 +12,6 @@ def add_version(url: str,
                 manifest_file: str = 'manifest.json',
                 update_file: str = 'update.json',
                 addon_id: Optional[str] = None) -> Dict[str, Any]:
-
     with open(manifest_file) as f:
         manifest = json.load(f)
     with open(update_file) as f:

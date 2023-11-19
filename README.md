@@ -24,8 +24,8 @@ on:
   push:
 
 jobs:
-  test:
-    name: 'Addon Update'
+  mozilla-update:
+    name: 'Mozilla Addon Update'
     runs-on: ubuntu-latest
     timeout-minutes: 5
 
@@ -49,7 +49,7 @@ on:
 
 jobs:
   mozilla-update:
-    name: 'Mozilla Addon Update JSON'
+    name: 'Mozilla Addon Update'
     runs-on: ubuntu-latest
     timeout-minutes: 5
 
@@ -77,3 +77,5 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: master
 ```
+
+To see this used in a build/publish/update workflow, see: https://github.com/cssnr/aviation-tools/blob/master/.github/workflows/build.yaml
