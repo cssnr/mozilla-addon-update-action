@@ -23,7 +23,7 @@ Documentation: https://extensionworkshop.com/documentation/manage/updating-your-
 
 ```yaml
   - name: "Mozilla Addon Update"
-    uses: cssnr/mozilla-addon-update-action@master
+    uses: cssnr/mozilla-addon-update-action@v1
     with:
       url: "https://github.com/cssnr/link-extractor/releases/download/{version}/link_extractor-firefox.xpi"
       update: update.json
@@ -65,8 +65,11 @@ jobs:
     if: ${{ github.event_name == 'release' }}
 
     steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+
       - name: "Mozilla Addon Update"
-        uses: cssnr/mozilla-addon-update-action@master
+        uses: cssnr/mozilla-addon-update-action@v1
         with:
           url: "https://github.com/cssnr/link-extractor/releases/download/{version}/link_extractor-firefox.xpi"
           update: update.json
@@ -121,7 +124,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: "Mozilla Addon Update"
-        uses: cssnr/mozilla-addon-update-action@master
+        uses: cssnr/mozilla-addon-update-action@v1
         with:
           url: "https://github.com/cssnr/link-extractor/releases/download/{version}/link_extractor-firefox.xpi"
           update: update.json
