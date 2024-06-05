@@ -1,5 +1,4 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=cssnr_mozilla-addon-update-action&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=cssnr_mozilla-addon-update-action)
-
 # Mozilla Addon Update File Action
 
 Update the Mozilla Firefox Update JSON File after a Release for Self Hosted Extensions.
@@ -16,7 +15,7 @@ Documentation: https://extensionworkshop.com/documentation/manage/updating-your-
 | update   | No       | update.json   | Update JSON File Location                  |
 | manifest | No       | manifest.json | Manifest File Location                     |
 | version  | No*      | -             | Version (overrides manifest version)       |
-| addon_id | No*      | -             | Mozilla Addon ID (overrides manifest id)   |
+| addon_id | No*      | -             | Addon ID (overrides manifest id)           |
 
 > [!NOTE]  
 > If you provide the `manifest` both `version` and `addon_id` will be parsed if present.  
