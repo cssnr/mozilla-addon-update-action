@@ -34,8 +34,8 @@ Documentation: https://extensionworkshop.com/documentation/manage/updating-your-
 
 ## More Information
 
-This action expects the `input_update` JSON file to exist and be valid. At a minimum,
-add a file similar to this where `link-extractor@cssnr.com` is your Addon ID:
+This action expects the `input_update` JSON file to exist, be valid JSON and have a matching addon_id entry.
+At a minimum, add a file similar to this where `link-extractor@cssnr.com` is your Addon ID:
 
 ```json
 {
