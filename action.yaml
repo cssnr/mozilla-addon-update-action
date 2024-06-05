@@ -1,19 +1,22 @@
 name: "Update Mozilla Update JSON"
-description: "Update Mozilla Addons Update JSON on Release"
+description: "Update the Mozilla Firefox Update JSON File after a Release for Self Hosted Extensions."
 author: "Shane"
 
 inputs:
   url:
     description: "Update URL with {version} String"
     required: true
-  manifest:
-    description: "Manifest File Location"
-    required: false
-    default: "manifest.json"
   update:
     description: "Update File Location"
     required: false
     default: "update.json"
+  manifest:
+    description: "Manifest File Location"
+    required: false
+    default: "manifest.json"
+  version:
+    description: "Addon Version"
+    required: false
   addon_id:
     description: "Mozilla Addon ID"
     required: false
