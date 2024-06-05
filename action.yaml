@@ -1,6 +1,9 @@
 name: "Update Mozilla Update JSON"
 description: "Update the Mozilla Firefox Update JSON File after a Release for Self Hosted Extensions."
 author: "Shane"
+branding:
+  icon: "globe"
+  color: "orange"
 
 inputs:
   url:
