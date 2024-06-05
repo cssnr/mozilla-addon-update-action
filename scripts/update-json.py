@@ -9,10 +9,9 @@ input_version = os.environ.get('INPUT_VERSION')
 input_addon_id = os.environ.get('INPUT_ADDON_ID')
 
 
-def add_version(url: str,
-                update_file: str,
-                version: str,
-                addon_id: str) -> Dict[str, Any]:
+def add_version(
+    url: str, update_file: str, version: str, addon_id: str
+) -> Dict[str, Any]:
     addition = {
         'version': f"{version}",
         'update_link': url.format(version=version),
