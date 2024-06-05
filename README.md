@@ -1,4 +1,5 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=cssnr_mozilla-addon-update-action&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=cssnr_mozilla-addon-update-action)
+
 # Mozilla Addon Update File Action
 
 Update the Mozilla Firefox Update JSON File after a Release for Self Hosted Extensions.
@@ -32,6 +33,21 @@ Documentation: https://extensionworkshop.com/documentation/manage/updating-your-
       addon_id: link-extractor@cssnr.com
 ```
 
+## More Information
+
+This action expects the `input_update` JSON file to exist and be valid. At a minimum,
+add a file similar to this where `link-extractor@cssnr.com` is your Addon ID:
+
+```json
+{
+    "addons": {
+        "link-extractor@cssnr.com": {
+            "updates": []
+        }
+    }
+}
+```
+
 ## Short Example
 
 ```yaml
@@ -40,7 +56,7 @@ name: "Mozilla Addon Update"
 on:
   workflow_dispatch:
   release:
-    types: [published]
+    types: [ published ]
 
 jobs:
   mozilla-update:
@@ -68,7 +84,7 @@ name: "Mozilla Addon Update"
 on:
   workflow_dispatch:
   release:
-    types: [published]
+    types: [ published ]
 
 jobs:
   build:
@@ -93,12 +109,12 @@ jobs:
           tag: ${{ github.ref }}
           overwrite: true
           file_glob: true
-  
+
   mozilla-update:
     name: "Mozilla Addon Update"
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    needs: [build]
+    needs: [ build ]
     if: ${{ github.event_name == 'release' }}
 
     steps:
@@ -127,5 +143,5 @@ jobs:
           branch: master
 ```
 
-To see this used in a build/publish/update workflow, check out: 
+To see this used in a build/publish/update workflow, check out:  
 https://github.com/cssnr/aviation-tools/blob/master/.github/workflows/build.yaml
