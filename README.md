@@ -1,81 +1,131 @@
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=cssnr_mozilla-addon-update-action&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=cssnr_mozilla-addon-update-action)
 # Mozilla Addon Update File Action
 
-Update the Mozilla Firefox Update JSON File after a Release.
+Update the Mozilla Firefox Update JSON File after a Release for Self Hosted Extensions.
 
-For more details see: [action.yaml](action.yaml)
+For more details see: [action.yaml](action.yaml) and [update-json.py](scripts/update-json.py).
 
-_Coming Soon..._
+Documentation: https://extensionworkshop.com/documentation/manage/updating-your-extension/
 
 ## Inputs
 
-| input    | default       | description                                |
-|----------|---------------|--------------------------------------------|
-| url      | -             | Update URL with `{version}` in the string. |
-| manifest | manifest.json | Manifest File Location                     |
-| update   | update.json   | Update File Location                       |
-| addon_id | None          | Mozilla Addon ID (if not in manifest.json) |
+| input    | required | default       | description                                |
+|----------|----------|---------------|--------------------------------------------|
+| url      | Yes      | -             | Update URL with `{version}` in the string. |
+| update   | No       | update.json   | Update JSON File Location                  |
+| manifest | No       | manifest.json | Manifest File Location                     |
+| version  | No*      | -             | Version (overrides manifest version)       |
+| addon_id | No*      | -             | Mozilla Addon ID (overrides manifest id)   |
+
+> [!NOTE]  
+> If you provide the `manifest` both `version` and `addon_id` will be parsed if present.  
+> Otherwise, you must provide both the `version` and `addon_id` which take precedence over `manifest`.
+
+```yaml
+  - name: "Mozilla Addon Update"
+    uses: cssnr/mozilla-addon-update-action@master
+    with:
+      url: "https://github.com/cssnr/link-extractor/releases/download/{version}/link_extractor-firefox.xpi"
+      update: update.json
+      manifest: manifest.json
+      version: "1.0.0"
+      addon_id: link-extractor@cssnr.com
+```
 
 ## Short Example
 
 ```yaml
-name: 'Mozilla Addon Update'
+name: "Mozilla Addon Update"
 
 on:
-  push:
+  workflow_dispatch:
+  release:
+    types: [published]
 
 jobs:
   mozilla-update:
-    name: 'Mozilla Addon Update'
+    name: "Mozilla Addon Update"
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    if: ${{ github.event_name == 'release' }}
 
     steps:
-      - name: 'Mozilla Addon Update'
+      - name: "Mozilla Addon Update"
         uses: cssnr/mozilla-addon-update-action@master
         with:
-          url: 'https://github.com/cssnr/link-extractor/releases/download/{version}/link_extractor-firefox.xpi'
-          manifest: manifest.json
+          url: "https://github.com/cssnr/link-extractor/releases/download/{version}/link_extractor-firefox.xpi"
           update: update.json
+          manifest: manifest.json
+          version: "1.0.0"
           addon_id: link-extractor@cssnr.com
 ```
 
 ## Full Example
 
 ```yaml
-name: 'Mozilla Addon Update'
+name: "Mozilla Addon Update"
 
 on:
-  push:
+  workflow_dispatch:
+  release:
+    types: [published]
 
 jobs:
-  mozilla-update:
-    name: 'Mozilla Addon Update'
+  build:
+    name: "Build"
     runs-on: ubuntu-latest
     timeout-minutes: 5
 
     steps:
-      - name: 'Checkout'
-        uses: actions/checkout@v3
+      - name: "Checkout"
+        uses: actions/checkout@v4
+
+      - name: "Build All"
+        run: |-
+          npm install
+          npm run build
+
+      - name: "Upload to Release"
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: web-ext-artifacts/*
+          tag: ${{ github.ref }}
+          overwrite: true
+          file_glob: true
+  
+  mozilla-update:
+    name: "Mozilla Addon Update"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: [build]
+    if: ${{ github.event_name == 'release' }}
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
 
       - name: "Mozilla Addon Update"
         uses: cssnr/mozilla-addon-update-action@master
         with:
-          url: 'https://github.com/cssnr/link-extractor/releases/download/{version}/link_extractor-firefox.xpi'
-          manifest: manifest.json
+          url: "https://github.com/cssnr/link-extractor/releases/download/{version}/link_extractor-firefox.xpi"
           update: update.json
+          manifest: manifest.json
+          version: "1.0.0"
           addon_id: link-extractor@cssnr.com
 
-      - name: 'Commit files'
+      - name: "Commit files"
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git commit -a -m "Update update.json"
 
-      - name: 'Push changes'
+      - name: "Push changes"
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: master
 ```
 
-To see this used in a build/publish/update workflow, see: https://github.com/cssnr/aviation-tools/blob/master/.github/workflows/build.yaml
+To see this used in a build/publish/update workflow, check out: 
+https://github.com/cssnr/aviation-tools/blob/master/.github/workflows/build.yaml
