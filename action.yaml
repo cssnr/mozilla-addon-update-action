@@ -1,4 +1,4 @@
-name: "Update Mozilla Update JSON"
+name: "Mozilla Addon Update Action"
 description: "Update the Mozilla Firefox Update JSON File after a Release for Self Hosted Extensions."
 author: "Shane"
 branding:
