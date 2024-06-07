@@ -1,9 +1,10 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=cssnr_mozilla-addon-update-action&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=cssnr_mozilla-addon-update-action)
-# Mozilla Addon Update File Action
+[![Tags](https://github.com/cssnr/mozilla-addon-update-action/actions/workflows/tags.yaml/badge.svg)](https://github.com/cssnr/mozilla-addon-update-action/actions/workflows/tags.yaml)
+# Mozilla Addon Update Action
 
 Update the Mozilla Firefox Update JSON File after a Release for Self Hosted Extensions.
 
-For more details see: [action.yaml](action.yaml) and [update-json.py](scripts/update-json.py).
+For more details see: [action.yaml](action.yaml) and [update-json.py](src/update-json.py).
 
 Documentation: https://extensionworkshop.com/documentation/manage/updating-your-extension/
 

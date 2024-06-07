@@ -2,7 +2,8 @@
 
 set -e
 
-echo "Starting: Firefox Addon Update"
+echo "Starting: Mozilla Addon Update"
 
 echo "Running: update-json.py"
-python /scripts/update-json.py
+
+python /src/update-json.py
