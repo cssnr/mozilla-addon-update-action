@@ -1,39 +1,53 @@
+[![Tags](https://img.shields.io/github/actions/workflow/status/cssnr/mozilla-addon-update-action/tags.yaml?logo=github&logoColor=white&label=tags)](https://github.com/cssnr/mozilla-addon-update-action/actions/workflows/tags.yaml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=cssnr_mozilla-addon-update-action&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=cssnr_mozilla-addon-update-action)
-[![Tags](https://github.com/cssnr/mozilla-addon-update-action/actions/workflows/tags.yaml/badge.svg)](https://github.com/cssnr/mozilla-addon-update-action/actions/workflows/tags.yaml)
+[![GitHub Release Version](https://img.shields.io/github/v/release/cssnr/mozilla-addon-update-action?logo=github)](https://github.com/cssnr/mozilla-addon-update-action/releases/latest)
+[![GitHub Top Language](https://img.shields.io/github/languages/top/cssnr/mozilla-addon-update-action?logo=htmx&logoColor=white)](https://github.com/cssnr/mozilla-addon-update-action)
+[![GitHub Org Stars](https://img.shields.io/github/stars/cssnr?style=flat&logo=github&logoColor=white)](https://cssnr.github.io/)
+[![Discord](https://img.shields.io/discord/899171661457293343?logo=discord&logoColor=white&label=discord&color=7289da)](https://discord.gg/wXy6m2X8wY)
+
 # Mozilla Addon Update Action
 
 Update the Mozilla Firefox Update JSON File after a Release for Self Hosted Extensions.
 
-For more details see: [action.yaml](action.yaml) and [update-json.py](src/update-json.py).
-
-Documentation: https://extensionworkshop.com/documentation/manage/updating-your-extension/
+* [Inputs](#Inputs)
+* [Outputs](#Outputs)
+* [Notes](#Notes)
+* [Examples](#Examples)
+* [Support](#Support)
+* [Contributing](#Contributing)
 
 ## Inputs
 
-| input    | required | default       | description                                |
-|----------|----------|---------------|--------------------------------------------|
-| url      | Yes      | -             | Update URL with `{version}` in the string. |
-| update   | No       | update.json   | Update JSON File Location                  |
-| manifest | No       | manifest.json | Manifest File Location                     |
-| version  | No*      | -             | Version (overrides manifest version)       |
-| addon_id | No*      | -             | Addon ID (overrides manifest id)           |
+| input    | required | default         | description                                |
+|----------|----------|-----------------|--------------------------------------------|
+| url      | **Yes**  | -               | Update URL with `{version}` in the string. |
+| update   | No       | `update.json`   | Update JSON File Location                  |
+| manifest | No       | `manifest.json` | Manifest File Location *                   |
+| version  | No       | -               | Override Version from `manifest` *         |
+| addon_id | No       | -               | Override Addon ID from `manifest` *        |
 
-> [!NOTE]  
-> If you provide the `manifest` both `version` and `addon_id` will be parsed if present.  
-> Otherwise, you must provide both the `version` and `addon_id` which take precedence over `manifest`.
+**manifest** - If provided the `version` and `addon_id` will be parsed from this file.
+
+**version** - Manually specify the `version` to use for `{version}` in `url`.
+
+**addon_id** - Manually specify the `addon_id` to use for `update` JSON file. If not provided this is parsed from
+the `manfiest` key: `browser_specific_settings.gecko.id`
 
 ```yaml
   - name: "Mozilla Addon Update"
     uses: cssnr/mozilla-addon-update-action@v1
     with:
       url: "https://github.com/cssnr/link-extractor/releases/download/{version}/link_extractor-firefox.xpi"
-      update: update.json
-      manifest: manifest.json
-      version: "1.0.0"
-      addon_id: link-extractor@cssnr.com
 ```
 
-## More Information
+## Outputs
+
+| output | description        |
+|--------|--------------------|
+| url    | Update URL Result  |
+| result | Update JSON Result |
+
+## Notes
 
 This action expects the `input_update` JSON file to exist, be valid JSON and have a matching addon_id entry.
 At a minimum, add a file similar to this where `link-extractor@cssnr.com` is your Addon ID:
@@ -48,7 +62,46 @@ At a minimum, add a file similar to this where `link-extractor@cssnr.com` is you
 }
 ```
 
-## Short Example
+For more details see: [src/main.py](src/main.py).
+
+Mozilla Documentation: https://extensionworkshop.com/documentation/manage/updating-your-extension/
+
+## Examples
+
+Basic Example with All Inputs:
+
+```yaml
+  - name: "Mozilla Addon Update"
+    uses: cssnr/mozilla-addon-update-action@v1
+    with:
+      url: "https://github.com/cssnr/link-extractor/releases/download/{version}/link_extractor-firefox.xpi"
+      update: update.json
+      manifest: manifest.json
+      version: "1.0.0"
+      addon_id: link-extractor@cssnr.com
+```
+
+Use Outputs:
+
+```yaml
+  - name: "Mozilla Addon Update"
+    id: update
+    uses: cssnr/mozilla-addon-update-action@v1
+    with:
+      url: "https://github.com/cssnr/link-extractor/releases/download/{version}/link_extractor-firefox.xpi"
+      update: update.json
+      manifest: manifest.json
+      version: "1.0.0"
+      addon_id: link-extractor@cssnr.com
+
+  - name: "Echo Outputs"
+    run: |
+      echo '${{ steps.update.outputs.url }}'
+      echo '${{ steps.update.outputs.result }}'
+
+```
+
+Simple Example:
 
 ```yaml
 name: "Mozilla Addon Update"
@@ -73,13 +126,9 @@ jobs:
         uses: cssnr/mozilla-addon-update-action@v1
         with:
           url: "https://github.com/cssnr/link-extractor/releases/download/{version}/link_extractor-firefox.xpi"
-          update: update.json
-          manifest: manifest.json
-          version: "1.0.0"
-          addon_id: link-extractor@cssnr.com
 ```
 
-## Full Example
+Full Example:
 
 ```yaml
 name: "Mozilla Addon Update"
@@ -128,10 +177,6 @@ jobs:
         uses: cssnr/mozilla-addon-update-action@v1
         with:
           url: "https://github.com/cssnr/link-extractor/releases/download/{version}/link_extractor-firefox.xpi"
-          update: update.json
-          manifest: manifest.json
-          version: "1.0.0"
-          addon_id: link-extractor@cssnr.com
 
       - name: "Commit files"
         run: |
@@ -148,3 +193,32 @@ jobs:
 
 To see this used in a build/publish/update workflow, check out:  
 https://github.com/cssnr/aviation-tools/blob/master/.github/workflows/build.yaml
+
+# Support
+
+For general help or to request a feature see:
+
+- Q&A Discussion: https://github.com/cssnr/virustotal-action/discussions/categories/q-a
+- Request a Feature: https://github.com/cssnr/virustotal-action/discussions/categories/feature-requests
+
+If you are experiencing an issue/bug or getting unexpected results you can:
+
+- Report an Issue: https://github.com/cssnr/virustotal-action/issues
+- Chat with us on Discord: https://discord.gg/wXy6m2X8wY
+- Provide General
+  Feedback: [https://cssnr.github.io/feedback/](https://cssnr.github.io/feedback/?app=Mozilla%20Addon%20Update)
+
+# Contributing
+
+Currently, the best way to contribute to this project is to star this project on GitHub.
+
+Additionally, you can support other GitHub Actions I have published:
+
+- [VirusTotal Action](https://github.com/cssnr/virustotal-action)
+- [Update Version Tags Action](https://github.com/cssnr/update-version-tags-action)
+- [Update JSON Value Action](https://github.com/cssnr/update-json-value-action)
+- [Parse Issue Form Action](https://github.com/cssnr/parse-issue-form-action)
+- [Portainer Stack Deploy](https://github.com/cssnr/portainer-stack-deploy-action)
+- [Mozilla Addon Update Action](https://github.com/cssnr/mozilla-addon-update-action)
+
+For a full list of current projects to support visit: [https://cssnr.github.io/](https://cssnr.github.io/)
