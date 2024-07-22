@@ -1,6 +1,5 @@
 FROM python:3.11-alpine
 
-COPY docker-entrypoint.sh /
-COPY src/ /src
+COPY src/main.py /main.py
 
-ENTRYPOINT ["sh", "/docker-entrypoint.sh"]
+ENTRYPOINT ["python", "/main.py"]
