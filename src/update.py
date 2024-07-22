@@ -43,7 +43,8 @@ print(data)
 with open(input_update, 'w') as update_json:
     update_json.write(data + '\n')
 
-print(f'::set-output name=url::{url}')
-print(f'::set-output name=result::{json.dumps(result)}')
+with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+    print(f'url={url}', file=f)
+    print(f'result={json.dumps(result)}', file=f)
 
 print('Finished Success.')
