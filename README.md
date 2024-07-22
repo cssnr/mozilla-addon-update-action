@@ -9,11 +9,9 @@
 
 Update the Mozilla Firefox Update JSON File after a Release for Self Hosted Extensions.
 
-Documentation: https://extensionworkshop.com/documentation/manage/updating-your-extension/
-
 * [Inputs](#Inputs)
 * [Outputs](#Outputs)
-* [Additional Information](#Additional-Information)
+* [Notes](#Notes)
 * [Examples](#Examples)
 * [Support](#Support)
 * [Contributing](#Contributing)
@@ -49,7 +47,7 @@ the `manfiest` key: `browser_specific_settings.gecko.id`
 | url    | Update URL Result  |
 | result | Update JSON Result |
 
-## Additional Information
+## Notes
 
 This action expects the `input_update` JSON file to exist, be valid JSON and have a matching addon_id entry.
 At a minimum, add a file similar to this where `link-extractor@cssnr.com` is your Addon ID:
@@ -64,7 +62,9 @@ At a minimum, add a file similar to this where `link-extractor@cssnr.com` is you
 }
 ```
 
-For more details see: [action.yaml](action.yaml) and [src/update-json.py](src/update-json.py).
+For more details see: [src/main.py](src/main.py).
+
+Mozilla Documentation: https://extensionworkshop.com/documentation/manage/updating-your-extension/
 
 ## Examples
 
