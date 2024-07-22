@@ -1,6 +1,6 @@
 FROM python:3.11-alpine
 
-COPY --chmod=0755 docker-entrypoint.sh /
-COPY --chmod=0755 src/ /src
+COPY docker-entrypoint.sh /
+COPY src/ /src
 
-ENTRYPOINT ["/docker-entrypoint.sh"]
+ENTRYPOINT ["sh", "/docker-entrypoint.sh"]

@@ -23,12 +23,12 @@ def add_version(
 
 
 if not input_manifest and not (input_version or input_addon_id):
-    raise ValueError('You must provide manifest or both version and addon_id')
+    raise ValueError('You must provide a manifest or both version and addon_id')
 
 if not os.path.isfile(input_update):
-    raise ValueError('Unable to locate input_update:', input_update)
+    raise ValueError('Unable to locate update file:', input_update)
 
-print(f'Using Update JSON: {input_update}')
+print(f'Using Update JSON file: {input_update}')
 
 if os.path.isfile(input_manifest):
     print(f'Reading Manifest: {input_manifest}')
@@ -46,3 +46,5 @@ print(data)
 
 with open(input_update, 'w') as update_json:
     update_json.write(data + '\n')
+
+print('Success.')

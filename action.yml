@@ -7,7 +7,7 @@ branding:
 
 inputs:
   url:
-    description: "Update URL with {version} String"
+    description: "Update URL with {version} in String"
     required: true
   update:
     description: "Update File Location"
