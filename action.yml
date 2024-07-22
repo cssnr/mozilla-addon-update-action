@@ -24,6 +24,12 @@ inputs:
     description: "Mozilla Addon ID"
     required: false
 
+outputs:
+  url:
+    description: "Update URL"
+  result:
+    description: "Update JSON"
+
 runs:
   using: "docker"
   image: "Dockerfile"

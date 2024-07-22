@@ -24,13 +24,15 @@ version = input_version or manifest['version']
 print(f'Addon version: {version}')
 addon_id = input_addon_id or manifest['browser_specific_settings']['gecko']['id']
 print(f'Addon ID: {addon_id}')
+url = input_url.format(version=version)
+print(f'Update URL: {url}')
 
 with open(input_update) as f:
     result = json.load(f)
 
 addition = {
     'version': version,
-    'update_link': input_url.format(version=version),
+    'update_link': url,
 }
 
 result['addons'][addon_id]['updates'].append(addition)
@@ -40,5 +42,8 @@ print(data)
 
 with open(input_update, 'w') as update_json:
     update_json.write(data + '\n')
+
+print(f'::set-output name=url::{url}')
+print(f'::set-output name=result::{json.dumps(result)}')
 
 print('Finished Success.')

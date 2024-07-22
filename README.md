@@ -12,6 +12,7 @@ Update the Mozilla Firefox Update JSON File after a Release for Self Hosted Exte
 Documentation: https://extensionworkshop.com/documentation/manage/updating-your-extension/
 
 * [Inputs](#Inputs)
+* [Outputs](#Outputs)
 * [Additional Information](#Additional-Information)
 * [Examples](#Examples)
 * [Support](#Support)
@@ -41,6 +42,13 @@ the `manfiest` key: `browser_specific_settings.gecko.id`
       url: "https://github.com/cssnr/link-extractor/releases/download/{version}/link_extractor-firefox.xpi"
 ```
 
+## Outputs
+
+| output | description        |
+|--------|--------------------|
+| url    | Update URL Result  |
+| result | Update JSON Result |
+
 ## Additional Information
 
 This action expects the `input_update` JSON file to exist, be valid JSON and have a matching addon_id entry.
@@ -48,11 +56,11 @@ At a minimum, add a file similar to this where `link-extractor@cssnr.com` is you
 
 ```json
 {
-  "addons": {
-    "link-extractor@cssnr.com": {
-      "updates": []
+    "addons": {
+        "link-extractor@cssnr.com": {
+            "updates": []
+        }
     }
-  }
 }
 ```
 
@@ -71,6 +79,26 @@ Basic Example with All Inputs:
       manifest: manifest.json
       version: "1.0.0"
       addon_id: link-extractor@cssnr.com
+```
+
+Use Outputs:
+
+```yaml
+  - name: "Mozilla Addon Update"
+    id: update
+    uses: cssnr/mozilla-addon-update-action@v1
+    with:
+      url: "https://github.com/cssnr/link-extractor/releases/download/{version}/link_extractor-firefox.xpi"
+      update: update.json
+      manifest: manifest.json
+      version: "1.0.0"
+      addon_id: link-extractor@cssnr.com
+
+  - name: "Echo Outputs"
+    run: |
+      echo '${{ steps.update.outputs.url }}'
+      echo '${{ steps.update.outputs.result }}'
+
 ```
 
 Simple Example:
