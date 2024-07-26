@@ -49,6 +49,19 @@ the `manfiest` key: `browser_specific_settings.gecko.id`
 | url    | Update URL Result  |
 | result | Update JSON Result |
 
+```yaml
+  - name: "Mozilla Addon Update"
+    id: update
+    uses: cssnr/mozilla-addon-update-action@v1
+    with:
+      url: "https://github.com/cssnr/link-extractor/releases/download/{version}/link_extractor-firefox.xpi"
+
+  - name: "Echo Outputs"
+    run: |
+      echo '${{ steps.update.outputs.url }}'
+      echo '${{ steps.update.outputs.result }}'
+```
+
 ## Notes
 
 This action expects the `input_update` JSON file to exist, be valid JSON and have a matching addon_id entry.
@@ -81,26 +94,6 @@ Basic Example with All Inputs:
       manifest: manifest.json
       version: "1.0.0"
       addon_id: link-extractor@cssnr.com
-```
-
-Use Outputs:
-
-```yaml
-  - name: "Mozilla Addon Update"
-    id: update
-    uses: cssnr/mozilla-addon-update-action@v1
-    with:
-      url: "https://github.com/cssnr/link-extractor/releases/download/{version}/link_extractor-firefox.xpi"
-      update: update.json
-      manifest: manifest.json
-      version: "1.0.0"
-      addon_id: link-extractor@cssnr.com
-
-  - name: "Echo Outputs"
-    run: |
-      echo '${{ steps.update.outputs.url }}'
-      echo '${{ steps.update.outputs.result }}'
-
 ```
 
 Simple Example:
@@ -200,12 +193,12 @@ https://github.com/cssnr/aviation-tools/blob/master/.github/workflows/build.yaml
 
 For general help or to request a feature see:
 
-- Q&A Discussion: https://github.com/cssnr/virustotal-action/discussions/categories/q-a
-- Request a Feature: https://github.com/cssnr/virustotal-action/discussions/categories/feature-requests
+- Q&A Discussion: https://github.com/cssnr/mozilla-addon-update-action/discussions/categories/q-a
+- Request a Feature: https://github.com/cssnr/mozilla-addon-update-action/discussions/categories/feature-requests
 
 If you are experiencing an issue/bug or getting unexpected results you can:
 
-- Report an Issue: https://github.com/cssnr/virustotal-action/issues
+- Report an Issue: https://github.com/cssnr/mozilla-addon-update-action/issues
 - Chat with us on Discord: https://discord.gg/wXy6m2X8wY
 - Provide General
   Feedback: [https://cssnr.github.io/feedback/](https://cssnr.github.io/feedback/?app=Mozilla%20Addon%20Update)
