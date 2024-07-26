@@ -47,4 +47,4 @@ with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
     print(f'url={url}', file=f)
     print(f'result={json.dumps(result)}', file=f)
 
-print('Finished Success.')
+print('\033[92mFinished Success.')
