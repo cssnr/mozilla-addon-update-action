@@ -1,0 +1,65 @@
+name: "Test"
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "src/**"
+
+jobs:
+  test:
+    name: "Test"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+
+      - name: "Create JSON"
+        uses: jsdaniell/create-json@v1.2.3
+        with:
+          name: "update.json"
+          json: '{"addons":{"test-id":{"updates":[]}}}'
+
+      - name: "Test Local Action"
+        id: test
+        uses: ./
+        with:
+          url: https://example.com/{version}
+          version: 1.0.0
+          addon_id: test-id
+
+      - name: "Validate Outputs"
+        env:
+          JSON: '{"addons": {"test-id": {"updates": [{"version": "1.0.0", "update_link": "https://example.com/1.0.0"}]}}}'
+        run: |
+          echo '${{ steps.test.outputs.url }}'
+          if [ '${{ steps.test.outputs.url }}' != 'https://example.com/1.0.0' ];then
+            echo "Invalid Output URL"
+            exit 1
+          fi
+          echo '${{ steps.test.outputs.result }}'
+          if [ '${{ steps.test.outputs.result }}' != '${{ env.JSON }}' ];then
+            echo "Invalid Output Result"
+            exit 1
+          fi
+
+  lint:
+    name: "Lint"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+
+      - name: "Setup Python"
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: "Flake8"
+        run: |
+          python -m pip install flake8
+          flake8 src
