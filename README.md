@@ -2,7 +2,8 @@
 [![Test](https://img.shields.io/github/actions/workflow/status/cssnr/mozilla-addon-update-action/test.yaml?logo=github&logoColor=white&label=test)](https://github.com/cssnr/mozilla-addon-update-action/actions/workflows/test.yaml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=cssnr_mozilla-addon-update-action&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=cssnr_mozilla-addon-update-action)
 [![GitHub Release Version](https://img.shields.io/github/v/release/cssnr/mozilla-addon-update-action?logo=github)](https://github.com/cssnr/mozilla-addon-update-action/releases/latest)
-[![GitHub Last Commit](https://img.shields.io/github/last-commit/cssnr/parse-issue-form-action?logo=github&logoColor=white&label=updated)](https://github.com/cssnr/parse-issue-form-action/graphs/commit-activity)
+[![GitHub Last Commit](https://img.shields.io/github/last-commit/cssnr/mozilla-addon-update-action?logo=github&logoColor=white&label=updated)](https://github.com/cssnr/mozilla-addon-update-action/graphs/commit-activity)
+[![Codeberg Last Commit](https://img.shields.io/gitea/last-commit/cssnr/mozilla-addon-update-action/master?gitea_url=https%3A%2F%2Fcodeberg.org%2F&logo=codeberg&logoColor=white&label=updated)](https://codeberg.org/cssnr/mozilla-addon-update-action)
 [![GitHub Top Language](https://img.shields.io/github/languages/top/cssnr/mozilla-addon-update-action?logo=htmx&logoColor=white)](https://github.com/cssnr/mozilla-addon-update-action)
 [![GitHub Org Stars](https://img.shields.io/github/stars/cssnr?style=flat&logo=github&logoColor=white)](https://cssnr.github.io/)
 [![Discord](https://img.shields.io/discord/899171661457293343?logo=discord&logoColor=white&label=discord&color=7289da)](https://discord.gg/wXy6m2X8wY)
@@ -11,55 +12,55 @@
 
 Update the Mozilla Firefox Update JSON File after a Release for Self Hosted Extensions.
 
-* [Inputs](#Inputs)
-* [Outputs](#Outputs)
-* [Notes](#Notes)
-* [Examples](#Examples)
-* [Support](#Support)
-* [Contributing](#Contributing)
+- [Inputs](#Inputs)
+- [Outputs](#Outputs)
+- [Notes](#Notes)
+- [Examples](#Examples)
+- [Support](#Support)
+- [Contributing](#Contributing)
 
 ## Inputs
 
 | input    | required | default         | description                                |
-|----------|----------|-----------------|--------------------------------------------|
+| -------- | -------- | --------------- | ------------------------------------------ |
 | url      | **Yes**  | -               | Update URL with `{version}` in the string. |
 | update   | No       | `update.json`   | Update JSON File Location                  |
-| manifest | No       | `manifest.json` | Manifest File Location *                   |
-| version  | No       | -               | Override Version from `manifest` *         |
-| addon_id | No       | -               | Override Addon ID from `manifest` *        |
+| manifest | No       | `manifest.json` | \* Manifest File Location                  |
+| version  | No       | -               | \* Override Version from `manifest`        |
+| addon_id | No       | -               | \* Override Addon ID from `manifest`       |
 
 **manifest** - If provided the `version` and `addon_id` will be parsed from this file.
 
 **version** - Manually specify the `version` to use for `{version}` in `url`.
 
-**addon_id** - Manually specify the `addon_id` to use for `update` JSON file. If not provided this is parsed from
-the `manfiest` key: `browser_specific_settings.gecko.id`
+**addon_id** - Manually specify the `addon_id` to use for `update` JSON file.
+If not provided this is parsed from the `manfiest` key: `browser_specific_settings.gecko.id`
 
 ```yaml
-  - name: "Mozilla Addon Update"
-    uses: cssnr/mozilla-addon-update-action@v1
-    with:
-      url: "https://github.com/cssnr/link-extractor/releases/download/{version}/link_extractor-firefox.xpi"
+- name: 'Mozilla Addon Update'
+  uses: cssnr/mozilla-addon-update-action@v1
+  with:
+    url: 'https://github.com/cssnr/link-extractor/releases/download/{version}/link_extractor-firefox.xpi'
 ```
 
 ## Outputs
 
 | output | description        |
-|--------|--------------------|
+| ------ | ------------------ |
 | url    | Update URL Result  |
 | result | Update JSON Result |
 
 ```yaml
-  - name: "Mozilla Addon Update"
-    id: update
-    uses: cssnr/mozilla-addon-update-action@v1
-    with:
-      url: "https://github.com/cssnr/link-extractor/releases/download/{version}/link_extractor-firefox.xpi"
+- name: 'Mozilla Addon Update'
+  id: update
+  uses: cssnr/mozilla-addon-update-action@v1
+  with:
+    url: 'https://github.com/cssnr/link-extractor/releases/download/{version}/link_extractor-firefox.xpi'
 
-  - name: "Echo Outputs"
-    run: |
-      echo '${{ steps.update.outputs.url }}'
-      echo '${{ steps.update.outputs.result }}'
+- name: 'Echo Outputs'
+  run: |
+    echo '${{ steps.update.outputs.url }}'
+    echo '${{ steps.update.outputs.result }}'
 ```
 
 ## Notes
@@ -69,11 +70,11 @@ At a minimum, add a file similar to this where `link-extractor@cssnr.com` is you
 
 ```json
 {
-    "addons": {
-        "link-extractor@cssnr.com": {
-            "updates": []
-        }
+  "addons": {
+    "link-extractor@cssnr.com": {
+      "updates": []
     }
+  }
 }
 ```
 
@@ -86,69 +87,69 @@ Mozilla Documentation: https://extensionworkshop.com/documentation/manage/updati
 Basic Example with All Inputs:
 
 ```yaml
-  - name: "Mozilla Addon Update"
-    uses: cssnr/mozilla-addon-update-action@v1
-    with:
-      url: "https://github.com/cssnr/link-extractor/releases/download/{version}/link_extractor-firefox.xpi"
-      update: update.json
-      manifest: manifest.json
-      version: "1.0.0"
-      addon_id: link-extractor@cssnr.com
+- name: 'Mozilla Addon Update'
+  uses: cssnr/mozilla-addon-update-action@v1
+  with:
+    url: 'https://github.com/cssnr/link-extractor/releases/download/{version}/link_extractor-firefox.xpi'
+    update: update.json
+    manifest: manifest.json
+    version: '1.0.0'
+    addon_id: link-extractor@cssnr.com
 ```
 
 Simple Example:
 
 ```yaml
-name: "Mozilla Addon Update"
+name: 'Mozilla Addon Update'
 
 on:
   workflow_dispatch:
   release:
-    types: [ published ]
+    types: [published]
 
 jobs:
   mozilla-update:
-    name: "Mozilla Addon Update"
+    name: 'Mozilla Addon Update'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     if: ${{ github.event_name == 'release' }}
 
     steps:
-      - name: "Checkout"
+      - name: 'Checkout'
         uses: actions/checkout@v4
 
-      - name: "Mozilla Addon Update"
+      - name: 'Mozilla Addon Update'
         uses: cssnr/mozilla-addon-update-action@v1
         with:
-          url: "https://github.com/cssnr/link-extractor/releases/download/{version}/link_extractor-firefox.xpi"
+          url: 'https://github.com/cssnr/link-extractor/releases/download/{version}/link_extractor-firefox.xpi'
 ```
 
 Full Example:
 
 ```yaml
-name: "Mozilla Addon Update"
+name: 'Mozilla Addon Update'
 
 on:
   workflow_dispatch:
   release:
-    types: [ published ]
+    types: [published]
 
 jobs:
   build:
-    name: "Build"
+    name: 'Build'
     runs-on: ubuntu-latest
     timeout-minutes: 5
 
     steps:
-      - name: "Checkout"
+      - name: 'Checkout'
         uses: actions/checkout@v4
 
-      - name: "Build All"
+      - name: 'Build All'
         run: |-
           npm install
           npm run build
 
-      - name: "Upload to Release"
+      - name: 'Upload to Release'
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
@@ -158,28 +159,28 @@ jobs:
           file_glob: true
 
   mozilla-update:
-    name: "Mozilla Addon Update"
+    name: 'Mozilla Addon Update'
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    needs: [ build ]
+    needs: [build]
     if: ${{ github.event_name == 'release' }}
 
     steps:
-      - name: "Checkout"
+      - name: 'Checkout'
         uses: actions/checkout@v4
 
-      - name: "Mozilla Addon Update"
+      - name: 'Mozilla Addon Update'
         uses: cssnr/mozilla-addon-update-action@v1
         with:
-          url: "https://github.com/cssnr/link-extractor/releases/download/{version}/link_extractor-firefox.xpi"
+          url: 'https://github.com/cssnr/link-extractor/releases/download/{version}/link_extractor-firefox.xpi'
 
-      - name: "Commit files"
+      - name: 'Commit files'
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git commit -a -m "Update update.json"
 
-      - name: "Push changes"
+      - name: 'Push changes'
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -213,6 +214,7 @@ Additionally, you can support other GitHub Actions I have published:
 - [Update Version Tags Action](https://github.com/cssnr/update-version-tags-action)
 - [Update JSON Value Action](https://github.com/cssnr/update-json-value-action)
 - [Parse Issue Form Action](https://github.com/cssnr/parse-issue-form-action)
+- [Mirror Repository Action](https://github.com/cssnr/mirror-repository-action)
 - [Portainer Stack Deploy](https://github.com/cssnr/portainer-stack-deploy-action)
 - [Mozilla Addon Update Action](https://github.com/cssnr/mozilla-addon-update-action)
 
