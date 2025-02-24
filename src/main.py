@@ -1,11 +1,17 @@
 import json
 import os
 
-input_url = os.environ.get('INPUT_URL')
-input_update = os.environ.get('INPUT_UPDATE')
-input_manifest = os.environ.get('INPUT_MANIFEST')
+
+
+print("🏳️ Mozilla Addon Update Action")
+
+
+input_url = os.environ['INPUT_URL']
+input_update = os.environ['INPUT_UPDATE']
+input_manifest = os.environ['INPUT_MANIFEST']
 input_version = os.environ.get('INPUT_VERSION')
 input_addon_id = os.environ.get('INPUT_ADDON_ID')
+
 
 if not input_manifest and not (input_version or input_addon_id):
     raise ValueError('You must provide a manifest or both version and addon_id')
@@ -49,4 +55,4 @@ with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
     # noinspection PyTypeChecker
     print(f'result={json.dumps(result)}', file=f)
 
-print('\u001b[32;1mFinished Success.')
+print("✅ \033[32;1mFinished Success")
