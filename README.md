@@ -22,12 +22,12 @@ Update the Mozilla Firefox Update JSON File after a Release for Self Hosted Exte
 ## Inputs
 
 | input    | required | default         | description                                |
-| -------- | -------- | --------------- | ------------------------------------------ |
+| -------- | :------: | --------------- | ------------------------------------------ |
 | url      | **Yes**  | -               | Update URL with `{version}` in the string. |
-| update   | No       | `update.json`   | Update JSON File Location                  |
-| manifest | No       | `manifest.json` | \* Manifest File Location                  |
-| version  | No       | -               | \* Override Version from `manifest`        |
-| addon_id | No       | -               | \* Override Addon ID from `manifest`       |
+| update   |    -     | `update.json`   | Update JSON File Location                  |
+| manifest |    -     | `manifest.json` | \* Manifest File Location                  |
+| version  |    -     | -               | \* Override Version from `manifest`        |
+| addon_id |    -     | -               | \* Override Addon ID from `manifest`       |
 
 **manifest** - If provided the `version` and `addon_id` will be parsed from this file.
 
@@ -201,8 +201,7 @@ If you are experiencing an issue/bug or getting unexpected results you can:
 
 - Report an Issue: https://github.com/cssnr/mozilla-addon-update-action/issues
 - Chat with us on Discord: https://discord.gg/wXy6m2X8wY
-- Provide General
-  Feedback: [https://cssnr.github.io/feedback/](https://cssnr.github.io/feedback/?app=Mozilla%20Addon%20Update)
+- Provide General Feedback: [https://cssnr.github.io/feedback/](https://cssnr.github.io/feedback/?app=Mozilla%20Addon%20Update)
 
 # Contributing
 
@@ -210,12 +209,15 @@ Currently, the best way to contribute to this project is to star this project on
 
 Additionally, you can support other GitHub Actions I have published:
 
-- [VirusTotal Action](https://github.com/cssnr/virustotal-action)
-- [Update Version Tags Action](https://github.com/cssnr/update-version-tags-action)
-- [Update JSON Value Action](https://github.com/cssnr/update-json-value-action)
-- [Parse Issue Form Action](https://github.com/cssnr/parse-issue-form-action)
-- [Mirror Repository Action](https://github.com/cssnr/mirror-repository-action)
-- [Portainer Stack Deploy](https://github.com/cssnr/portainer-stack-deploy-action)
-- [Mozilla Addon Update Action](https://github.com/cssnr/mozilla-addon-update-action)
+- [Stack Deploy Action](https://github.com/cssnr/stack-deploy-action?tab=readme-ov-file#readme)
+- [Portainer Stack Deploy](https://github.com/cssnr/portainer-stack-deploy-action?tab=readme-ov-file#readme)
+- [VirusTotal Action](https://github.com/cssnr/virustotal-action?tab=readme-ov-file#readme)
+- [Mirror Repository Action](https://github.com/cssnr/mirror-repository-action?tab=readme-ov-file#readme)
+- [Update Version Tags Action](https://github.com/cssnr/update-version-tags-action?tab=readme-ov-file#readme)
+- [Update JSON Value Action](https://github.com/cssnr/update-json-value-action?tab=readme-ov-file#readme)
+- [Parse Issue Form Action](https://github.com/cssnr/parse-issue-form-action?tab=readme-ov-file#readme)
+- [Cloudflare Purge Cache Action](https://github.com/cssnr/cloudflare-purge-cache-action?tab=readme-ov-file#readme)
+- [Mozilla Addon Update Action](https://github.com/cssnr/mozilla-addon-update-action?tab=readme-ov-file#readme)
+- [Docker Tags Action](https://github.com/cssnr/docker-tags-action?tab=readme-ov-file#readme)
 
 For a full list of current projects to support visit: [https://cssnr.github.io/](https://cssnr.github.io/)

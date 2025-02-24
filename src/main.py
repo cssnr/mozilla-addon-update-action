@@ -44,7 +44,9 @@ with open(input_update, 'w') as update_json:
     update_json.write(data + '\n')
 
 with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+    # noinspection PyTypeChecker
     print(f'url={url}', file=f)
+    # noinspection PyTypeChecker
     print(f'result={json.dumps(result)}', file=f)
 
 print('\u001b[32;1mFinished Success.')
