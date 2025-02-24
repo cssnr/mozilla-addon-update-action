@@ -11,14 +11,14 @@
 
 # Mozilla Addon Update Action
 
-Update the Mozilla Firefox Update JSON File after a Release for Self Hosted Extensions.
-
 - [Inputs](#Inputs)
 - [Outputs](#Outputs)
 - [Notes](#Notes)
 - [Examples](#Examples)
 - [Support](#Support)
 - [Contributing](#Contributing)
+
+Update the Mozilla Firefox Update JSON File after a Release for Self Hosted Extensions.
 
 ## Inputs
 
