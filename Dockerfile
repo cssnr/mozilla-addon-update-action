@@ -1,5 +1,5 @@
-FROM python:3.11-alpine
+FROM python:3.13-alpine
 
-COPY src/main.py /main.py
+COPY src/ /src
 
-ENTRYPOINT ["python", "/main.py"]
+ENTRYPOINT ["python", "/src/main.py"]

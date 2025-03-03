@@ -2,7 +2,11 @@ name: "Test"
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "18 18 * * 1,3,5"
   push:
+    branches: [master]
+  pull_request:
 
 jobs:
   test:
@@ -32,32 +36,19 @@ jobs:
         env:
           JSON: '{"addons": {"test-id": {"updates": [{"version": "1.0.0", "update_link": "https://example.com/1.0.0"}]}}}'
         run: |
-          echo '${{ steps.test.outputs.url }}'
+          echo url: '${{ steps.test.outputs.url }}'
           if [ '${{ steps.test.outputs.url }}' != 'https://example.com/1.0.0' ];then
-            echo "Invalid Output URL"
+            echo "Invalid Output: url"
             exit 1
           fi
-          echo '${{ steps.test.outputs.result }}'
+          echo result: '${{ steps.test.outputs.result }}'
           if [ '${{ steps.test.outputs.result }}' != '${{ env.JSON }}' ];then
-            echo "Invalid Output Result"
+            echo "Invalid Output: result"
             exit 1
           fi
 
-  lint:
-    name: "Lint"
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-
-    steps:
-      - name: "Checkout"
-        uses: actions/checkout@v4
-
-      - name: "Setup Python"
-        uses: actions/setup-python@v5
+      - name: "Schedule Failure Notification"
+        if: ${{ always() && failure() && github.event_name == 'schedule' }}
+        uses: sarisia/actions-status-discord@v1
         with:
-          python-version: "3.11"
-
-      - name: "Flake8"
-        run: |
-          python -m pip install flake8
-          flake8 src
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
