@@ -6,6 +6,10 @@ on:
     branches: ["**"]
     tags: ["**"]
 
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
 jobs:
   mirror:
     name: "Mirror"
@@ -14,7 +18,7 @@ jobs:
 
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
