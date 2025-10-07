@@ -18,6 +18,13 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v4
 
+      #- name: "Debug CTX github"
+      #  if: ${{ !github.event.act }}
+      #  continue-on-error: true
+      #  env:
+      #    GITHUB_CTX: ${{ toJSON(github) }}
+      #  run: echo "$GITHUB_CTX"
+
       - name: "Create JSON"
         uses: jsdaniell/create-json@v1.2.3
         with:

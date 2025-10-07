@@ -11,18 +11,14 @@ inputs:
     required: true
   update:
     description: "Update File Location"
-    required: false
     default: "update.json"
   manifest:
     description: "Manifest File Location"
-    required: false
     default: "manifest.json"
   version:
     description: "Addon Version"
-    required: false
   addon_id:
     description: "Mozilla Addon ID"
-    required: false
 
 outputs:
   url:
