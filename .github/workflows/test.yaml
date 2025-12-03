@@ -11,7 +11,8 @@ on:
   pull_request:
 
 env:
-  json: '{"addons":{"test-id":{"updates":[{"version":"1.0.0","update_link":"https://example.com/1.0.0"}]}}}'
+  url: "https://example.com/1.0.0"
+  json: '{"addons": {"test-id": {"updates": [{"version": "1.0.0", "update_link": "https://example.com/1.0.0"}]}}}'
 
 jobs:
   test:
@@ -55,12 +56,25 @@ jobs:
           addon_id: test-id
 
       - name: "Validate Outputs"
-        uses: cssnr/validate-outputs-action@updates
-        with:
-          outputs: ${{ toJSON(steps.test.outputs) }}
-          data: |
-            url: https://example.com/1.0.0
-            result: ${{ env.json }}
+        run: |
+          echo url: '${{ steps.test.outputs.url }}'
+          if [ '${{ steps.test.outputs.url }}' != '${{ env.url }}' ];then
+            echo "Invalid Output: url"
+            exit 1
+          fi
+          echo result: '${{ steps.test.outputs.result }}'
+          if [ '${{ steps.test.outputs.result }}' != '${{ env.json }}' ];then
+            echo "Invalid Output: result"
+            exit 1
+          fi
+
+      #- name: "Validate Outputs"
+      #  uses: cssnr/validate-outputs-action@updates
+      #  with:
+      #    outputs: ${{ toJSON(steps.test.outputs) }}
+      #    data: |
+      #      url: https://example.com/1.0.0
+      #      result: ${{ env.json }}
 
       - name: "Schedule Failure Notification"
         if: ${{ failure() && github.event_name == 'schedule' }}
