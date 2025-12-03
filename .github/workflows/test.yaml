@@ -55,7 +55,7 @@ jobs:
           addon_id: test-id
 
       - name: "Validate Outputs"
-        uses: cssnr/validate-outputs-action@master
+        uses: cssnr/validate-outputs-action@updates
         with:
           outputs: ${{ toJSON(steps.test.outputs) }}
           data: |
