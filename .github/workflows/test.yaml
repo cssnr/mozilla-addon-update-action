@@ -1,12 +1,17 @@
 name: "Test"
 
+# actions-up-ignore-file
+
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "18 18 * * 1,3,5"
+  #schedule:
+  #  - cron: "18 18 * * 1,3,5"
   push:
     branches: [master]
   pull_request:
+
+env:
+  json: '{"addons": {"test-id": {"updates": [{"version": "1.0.0", "update_link": "https://example.com/1.0.0"}]}}}'
 
 jobs:
   test:
@@ -16,14 +21,24 @@ jobs:
 
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
-      #- name: "Debug CTX github"
-      #  if: ${{ !github.event.act }}
-      #  continue-on-error: true
-      #  env:
-      #    GITHUB_CTX: ${{ toJSON(github) }}
-      #  run: echo "$GITHUB_CTX"
+      - name: "Debug event.json"
+        if: ${{ !github.event.act }}
+        continue-on-error: true
+        run: cat "${GITHUB_EVENT_PATH}"
+
+      - name: "Debug CTX github"
+        if: ${{ !github.event.act }}
+        continue-on-error: true
+        env:
+          GITHUB_CTX: ${{ toJSON(github) }}
+        run: echo "$GITHUB_CTX"
+
+      - name: "Debug Environment"
+        if: ${{ !github.event.act }}
+        continue-on-error: true
+        run: env
 
       - name: "Create JSON"
         uses: jsdaniell/create-json@v1.2.3
@@ -40,22 +55,16 @@ jobs:
           addon_id: test-id
 
       - name: "Validate Outputs"
-        env:
-          JSON: '{"addons": {"test-id": {"updates": [{"version": "1.0.0", "update_link": "https://example.com/1.0.0"}]}}}'
-        run: |
-          echo url: '${{ steps.test.outputs.url }}'
-          if [ '${{ steps.test.outputs.url }}' != 'https://example.com/1.0.0' ];then
-            echo "Invalid Output: url"
-            exit 1
-          fi
-          echo result: '${{ steps.test.outputs.result }}'
-          if [ '${{ steps.test.outputs.result }}' != '${{ env.JSON }}' ];then
-            echo "Invalid Output: result"
-            exit 1
-          fi
+        uses: cssnr/validate-outputs-action@master
+        with:
+          outputs: ${{ toJSON(steps.test.outputs) }}
+          data: |
+            url: https://example.com/1.0.0
+            result: ${{ env.json }}
 
       - name: "Schedule Failure Notification"
         if: ${{ failure() && github.event_name == 'schedule' }}
         uses: sarisia/actions-status-discord@v1
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          description: ${{ github.event.repository.html_url }}/actions/runs/${{ github.run_id }}
