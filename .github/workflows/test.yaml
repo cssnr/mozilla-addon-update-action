@@ -10,7 +10,7 @@ on:
 
 env:
   url: "https://example.com/1.0.0"
-  json: '{"addons": {"test-id": {"updates": [{"version": "1.0.0", "update_link": "https://example.com/1.0.0"}]}}}'
+  json: '{"addons":{"test-id":{"updates":[{"version":"1.0.0","update_link":"https://example.com/1.0.0"}]}}}'
 
 jobs:
   test:
