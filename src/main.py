@@ -1,7 +1,6 @@
 import json
 import os
 
-
 print("🏳️ Mozilla Addon Update Action")
 
 

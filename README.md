@@ -20,6 +20,9 @@
 
 # Mozilla Addon Update Action
 
+<a title="Web Store Publish Action" href="https://actions.cssnr.com/" target="_blank">
+<img alt="Web Store Publish Action" align="right" width="128" height="auto" src="https://raw.githubusercontent.com/cssnr/mozilla-addon-update/refs/heads/master/.github/assets/logo.svg"></a>
+
 - [Inputs](#Inputs)
 - [Outputs](#Outputs)
 - [Notes](#Notes)
