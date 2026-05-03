@@ -64,13 +64,13 @@ jobs:
             exit 1
           fi
 
-      #- name: "Validate Outputs"
-      #  uses: cssnr/validate-outputs-action@updates
-      #  with:
-      #    outputs: ${{ toJSON(steps.test.outputs) }}
-      #    data: |
-      #      url: https://example.com/1.0.0
-      #      result: ${{ env.json }}
+      - name: "Validate Outputs"
+        uses: cssnr/validate-outputs-action@master
+        with:
+          outputs: ${{ toJSON(steps.test.outputs) }}
+          data: |
+            url: https://example.com/1.0.0
+            result: ${{ env.json }}
 
       - name: "Schedule Failure Notification"
         if: ${{ failure() && github.event_name == 'schedule' }}
