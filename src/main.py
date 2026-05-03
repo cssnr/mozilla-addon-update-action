@@ -15,10 +15,8 @@ input_addon_id = os.environ.get("INPUT_ADDON_ID")
 if not input_manifest and not (input_version or input_addon_id):
     raise ValueError("You must provide a manifest or both version and addon_id")
 
-if not os.path.isfile(input_update):
-    raise ValueError("Unable to locate update file:", input_update)
 
-print(f"Using update file: {input_update}")
+print(f"📄 Using update file: {input_update}")
 
 if os.path.isfile(input_manifest):
     print(f"Reading manifest: {input_manifest}")
@@ -26,14 +24,19 @@ if os.path.isfile(input_manifest):
         manifest = json.load(f)
 
 version = input_version or manifest["version"]
-print(f"Addon version: {version}")
+print(f"  Addon Version:   {version}")
 addon_id = input_addon_id or manifest["browser_specific_settings"]["gecko"]["id"]
-print(f"Addon ID: {addon_id}")
+print(f"  Addon ID:        {addon_id}")
 url = input_url.format(version=version)
-print(f"Update URL: {url}")
+print(f"  Update URL:      {url}")
 
-with open(input_update) as f:
-    result = json.load(f)
+if os.path.isfile(input_update):
+    print(f"📚 Reading Update File: {input_update}")
+    with open(input_update) as f:
+        result = json.load(f)
+else:
+    print(f"⚠️ Update File Not Found! Creating: {input_update}")
+    result = {"addons": {addon_id: {"updates": []}}}
 
 addition = {
     "version": version,
@@ -43,7 +46,9 @@ addition = {
 result["addons"][addon_id]["updates"].append(addition)
 
 data = json.dumps(result, indent=2)
+print("::group::Result")
 print(data)
+print("::endgroup::")
 
 with open(input_update, "w") as update_json:
     update_json.write(data + "\n")

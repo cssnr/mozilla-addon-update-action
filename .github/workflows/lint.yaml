@@ -103,12 +103,12 @@ jobs:
       - name: "yamllint"
         if: ${{ !cancelled() }}
         env:
-          CONFIG: "{extends: relaxed, ignore: [node_modules/], rules: {line-length: {max: 119}}}"
+          CONFIG: ".github/yamllint.yaml"
         run: |
           echo "::group::List Files"
-          yamllint -d '${{ env.CONFIG }}' --list-files .
+          yamllint -c "${{ env.CONFIG }}" --list-files .
           echo "::endgroup::"
-          yamllint -d '${{ env.CONFIG }}' .
+          yamllint -c "${{ env.CONFIG }}" .
 
       - name: "actionlint"
         if: ${{ !cancelled() }}

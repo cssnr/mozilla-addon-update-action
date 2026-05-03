@@ -4,8 +4,6 @@ name: "Test"
 
 on:
   workflow_dispatch:
-  #schedule:
-  #  - cron: "18 18 * * 1,3,5"
   push:
     branches: [master]
   pull_request:
@@ -28,24 +26,22 @@ jobs:
         if: ${{ !github.event.act }}
         continue-on-error: true
         run: cat "${GITHUB_EVENT_PATH}"
-
       - name: "Debug CTX github"
         if: ${{ !github.event.act }}
         continue-on-error: true
         env:
           GITHUB_CTX: ${{ toJSON(github) }}
         run: echo "$GITHUB_CTX"
-
       - name: "Debug Environment"
         if: ${{ !github.event.act }}
         continue-on-error: true
         run: env
 
-      - name: "Create JSON"
-        uses: jsdaniell/create-json@v1.2.3
-        with:
-          name: "update.json"
-          json: '{"addons":{"test-id":{"updates":[]}}}'
+      #- name: "Create JSON"
+      #  uses: jsdaniell/create-json@v1.2.3
+      #  with:
+      #    name: "update.json"
+      #    json: '{"addons":{"test-id":{"updates":[]}}}'
 
       - name: "Test Local Action"
         id: test
