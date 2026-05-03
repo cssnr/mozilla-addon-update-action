@@ -1,6 +1,7 @@
 [![GitHub Tag Major](https://img.shields.io/github/v/tag/cssnr/mozilla-addon-update-action?sort=semver&filter=!v*.*&logo=git&logoColor=white&labelColor=585858&label=%20)](https://github.com/cssnr/mozilla-addon-update-action/tags)
 [![GitHub Tag Minor](https://img.shields.io/github/v/tag/cssnr/mozilla-addon-update-action?sort=semver&filter=!v*.*.*&logo=git&logoColor=white&labelColor=585858&label=%20)](https://github.com/cssnr/mozilla-addon-update-action/releases)
 [![GitHub Release Version](https://img.shields.io/github/v/release/cssnr/mozilla-addon-update-action?logo=git&logoColor=white&labelColor=585858&label=%20)](https://github.com/cssnr/mozilla-addon-update-action/releases/latest)
+[![Action Run Using](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fcssnr%2Fmozilla-addon-update-action%2Frefs%2Fheads%2Fmaster%2Faction.yml&query=%24.runs.using&logo=githubactions&logoColor=white&label=runs)](https://github.com/cssnr/mozilla-addon-update-action/blob/master/action.yml)
 [![Workflow Release](https://img.shields.io/github/actions/workflow/status/cssnr/mozilla-addon-update-action/release.yaml?logo=norton&logoColor=white&label=release)](https://github.com/cssnr/mozilla-addon-update-action/actions/workflows/release.yaml)
 [![Workflow Test](https://img.shields.io/github/actions/workflow/status/cssnr/mozilla-addon-update-action/test.yaml?logo=norton&logoColor=white&label=test)](https://github.com/cssnr/mozilla-addon-update-action/actions/workflows/test.yaml)
 [![Workflow Lint](https://img.shields.io/github/actions/workflow/status/cssnr/mozilla-addon-update-action/lint.yaml?logo=norton&logoColor=white&label=lint)](https://github.com/cssnr/mozilla-addon-update-action/actions/workflows/lint.yaml)
@@ -21,7 +22,7 @@
 # Mozilla Addon Update Action
 
 <a title="Mozilla Addon Update Action" href="https://actions.cssnr.com/" target="_blank">
-<img alt="Mozilla Addon Update Action" align="right" width="128" height="auto" src="https://raw.githubusercontent.com/cssnr/mozilla-addon-update/refs/heads/master/.github/assets/logo.svg"></a>
+<img alt="Mozilla Addon Update Action" align="right" width="128" height="auto" src="https://raw.githubusercontent.com/cssnr/mozilla-addon-update-action/master/.github/assets/logo.svg"></a>
 
 - [Inputs](#Inputs)
 - [Outputs](#Outputs)
@@ -37,11 +38,13 @@ Update the Mozilla Firefox Update JSON File after a Release for Self Hosted Exte
 
 | Input    | Default         | Short&nbsp;Description&nbsp;of&nbsp;the&nbsp;Input&nbsp;Value |
 | -------- | --------------- | ------------------------------------------------------------- |
-| url      | **Required**    | Update URL with `{version}` in the string.                    |
+| url      | **Required**    | Update URL w/ `{version}` Template                            |
 | update   | `update.json`   | Update JSON File Location                                     |
 | manifest | `manifest.json` | \* Manifest File Location                                     |
 | version  | -               | \* Override Version from `manifest`                           |
 | addon_id | -               | \* Override Addon ID from `manifest`                          |
+
+**url** - You can provide a fully formatted URL or use the `{version}` template string.
 
 **manifest** - If provided the `version` and `addon_id` will be parsed from this file.
 
@@ -133,7 +136,7 @@ jobs:
 
     steps:
       - name: 'Checkout'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: 'Mozilla Addon Update'
         uses: cssnr/mozilla-addon-update-action@v1
@@ -144,64 +147,102 @@ jobs:
 Full Example:
 
 ```yaml
-name: 'Mozilla Addon Update'
+name: 'Release'
 
 on:
-  workflow_dispatch:
   release:
     types: [published]
+
+env:
+  PACKAGE_NAME: geoimage
+  MOZILLA_ID: geo-image@cssnr.com
+  UPDATE_JSON: update.json
 
 jobs:
   build:
     name: 'Build'
+    uses: ./.github/workflows/build.yaml
+    secrets: inherit
+    with:
+      version: ${{ github.event.release.tag_name }} # github.ref_name can be empty
+    permissions:
+      contents: write
+
+  publish-mozilla:
+    # https://mozilla.github.io/addons-server/topics/api/index.html
+    name: 'Publish Mozilla'
+    if: ${{ !github.event.release.prerelease }}
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 15
+    needs: [build]
+
+    permissions:
+      contents: write
+
+    environment:
+      name: mozilla
+      url: '${{ github.server_url }}/${{ github.repository }}/releases/latest/download/${{ env.PACKAGE_NAME }}-firefox.xpi'
 
     steps:
-      - name: 'Checkout'
-        uses: actions/checkout@v4
+      - name: 'Download Artifacts'
+        uses: actions/download-artifact@v8
+        with:
+          name: artifacts
 
-      - name: 'Build All'
-        run: |-
-          npm install
-          npm run build
+      # NOTE: This installs web-ext using npx
+      - name: 'Sign Mozilla Addon'
+        # https://extensionworkshop.com/documentation/develop/web-ext-command-reference/#web-ext-sign
+        env:
+          FIREFOX_API_KEY: ${{ secrets.FIREFOX_API_KEY }}
+          FIREFOX_API_SECRET: ${{ secrets.FIREFOX_API_SECRET }}
+        run: |
+          npx web-ext sign --no-input \
+            --api-key="${FIREFOX_API_KEY}" \
+            --api-secret="${FIREFOX_API_SECRET}" \
+            --channel=unlisted \
+            --source-dir="firefox-mv3" \
+            --upload-source-code="${{ env.PACKAGE_NAME }}-${{ github.event.release.tag_name }}-sources.zip"
 
       - name: 'Upload to Release'
-        uses: svenstaro/upload-release-action@v2
+        uses: cssnr/upload-release-action@v1
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: web-ext-artifacts/*
-          tag: ${{ github.ref }}
           overwrite: true
-          file_glob: true
+          globs: web-ext-artifacts/*.xpi
+          names: '${{ env.PACKAGE_NAME }}-firefox.xpi'
 
-  mozilla-update:
-    name: 'Mozilla Addon Update'
+  update-mozilla:
+    name: 'Update Mozilla'
+    if: ${{ !github.event.release.prerelease }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    needs: [build]
-    if: ${{ github.event_name == 'release' }}
+    needs: [publish-mozilla]
+
+    permissions:
+      contents: write
 
     steps:
       - name: 'Checkout'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
 
       - name: 'Mozilla Addon Update'
         uses: cssnr/mozilla-addon-update-action@v1
         with:
-          url: 'https://github.com/cssnr/link-extractor/releases/download/{version}/link_extractor-firefox.xpi'
+          url: 'https://github.com/${{ github.repository }}/releases/download/{version}/${{ env.PACKAGE_NAME }}-firefox.xpi'
+          addon_id: ${{ env.MOZILLA_ID }}
+          version: ${{ github.event.release.tag_name }}
 
-      - name: 'Commit files'
-        run: |
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git commit -a -m "Update update.json"
-
-      - name: 'Push changes'
-        uses: ad-m/github-push-action@master
+      - name: 'Commit Action'
+        id: commit
+        uses: suzuki-shunsuke/commit-action@f12e2d628a4ab72dcefe7890ae07e8dbf1e201b9 # v0.1.1
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: master
+          commit_message: 'Bump ${{ env.UPDATE_JSON }} to ${{ github.event.release.tag_name }}'
+          #github_token: ${{ steps.app.outputs.token }}
+          app_id: 146360
+          app_private_key: ${{ secrets.APP_PRIVATE_KEY }}
+          fail_on_self_push: false
 ```
 
 For more examples, you can check out other projects using this action:  
