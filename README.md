@@ -20,8 +20,8 @@
 
 # Mozilla Addon Update Action
 
-<a title="Web Store Publish Action" href="https://actions.cssnr.com/" target="_blank">
-<img alt="Web Store Publish Action" align="right" width="128" height="auto" src="https://raw.githubusercontent.com/cssnr/mozilla-addon-update/refs/heads/master/.github/assets/logo.svg"></a>
+<a title="Mozilla Addon Update Action" href="https://actions.cssnr.com/" target="_blank">
+<img alt="Mozilla Addon Update Action" align="right" width="128" height="auto" src="https://raw.githubusercontent.com/cssnr/mozilla-addon-update/refs/heads/master/.github/assets/logo.svg"></a>
 
 - [Inputs](#Inputs)
 - [Outputs](#Outputs)
@@ -78,6 +78,9 @@ If not provided this is parsed from the `manfiest` key: `browser_specific_settin
 ```
 
 ## Notes
+
+> [!TIP]  
+> The addon will now attempt to create the file if it does not exist.
 
 This action expects the `input_update` JSON file to exist, be valid JSON and have a matching addon_id entry.
 At a minimum, add a file similar to this where `link-extractor@cssnr.com` is your Addon ID:
@@ -201,8 +204,8 @@ jobs:
           branch: master
 ```
 
-To see this used in a build/publish/update workflow, check out:  
-https://github.com/cssnr/aviation-tools/blob/master/.github/workflows/build.yaml
+For more examples, you can check out other projects using this action:  
+https://github.com/cssnr/mozilla-addon-update-action/network/dependents
 
 ## Tags
 
