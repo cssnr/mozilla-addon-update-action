@@ -71,7 +71,7 @@ jobs:
           outputs: ${{ toJSON(steps.test.outputs) }}
           data: |
             url: https://example.com/1.0.0
-            result: "${{ env.json }}"
+            result: '${{ env.json }}'
 
       - name: "Schedule Failure Notification"
         if: ${{ failure() && github.event_name == 'schedule' }}
